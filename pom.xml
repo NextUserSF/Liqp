@@ -3,7 +3,7 @@
   <groupId>nl.big-o</groupId>
   <artifactId>liqp</artifactId>
   <packaging>jar</packaging>
-  <version>0.7.4-SNAPSHOT</version>
+  <version>0.7.4-nextuser</version>
   <name>Liqp</name>
   <description>A Java implementation of the Liquid templating engine backed up by an ANTLR grammar.</description>
   <url>https://github.com/bkiers/Liqp</url>
@@ -36,13 +36,9 @@
   </developers>
 
   <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
-    </snapshotRepository>
     <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <id>nextuser-snapshot</id>
+      <url>s3://nextuser-repository/snapshot</url>
     </repository>
   </distributionManagement>
 
@@ -173,18 +169,17 @@
         </configuration>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.20.1</version>
-        <configuration>
-          <excludes>
-            <exclude>**/TestUtils.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-
     </plugins>
+
+    <extensions>
+      <!-- Config to deploy maven repository on amazon storage (s3) -->
+      <!-- Don't forget to set environment variables AWS_ACCESS_KEY_ID and AWS_SECRET_KEY -->
+      <extension>
+        <groupId>org.kuali.maven.wagons</groupId>
+        <artifactId>maven-s3-wagon</artifactId>
+        <version>1.2.1</version>
+      </extension>
+    </extensions>
   </build>
 
   <profiles>
@@ -218,20 +213,6 @@
                 <goals>
                   <goal>jar</goal>
                 </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-            <executions>
-              <execution>
-               <id>sign-artifacts</id>
-               <phase>verify</phase>
-               <goals>
-                 <goal>sign</goal>
-               </goals>
               </execution>
             </executions>
           </plugin>
